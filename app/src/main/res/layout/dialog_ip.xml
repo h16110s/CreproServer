@@ -6,8 +6,10 @@
     <TextView
             android:text="接続サーバ"
             android:layout_width="match_parent"
-            android:layout_height="34dp" android:id="@+id/textView" android:gravity="center"
-            android:textSize="14sp"/>
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:layout_height="40dp" android:id="@+id/textView" android:gravity="center"
+            android:textSize="18sp"/>
     <TextView
             android:text="現在の接続先："
             android:layout_width="match_parent"
@@ -15,12 +17,17 @@
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
             android:inputType="textPersonName"
             android:hint="Input New Server IP Address"
             android:ems="10"
             android:id="@+id/newServer"/>
     <EditText
             android:layout_width="match_parent"
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
             android:ems="10"
