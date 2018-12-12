@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HTTPreq</string>
+    <string name="title">検索結果</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.httpreq;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,26 +33,22 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ArrayList<Maxim> list = new ArrayList<Maxim>();
     MyAdapter myAdapter;
-
     String address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         address="http://192.168.10.100:3000";
-
         textViewUrl = (TextView)findViewById(R.id.reqURLview);
         buttonGet = (Button)findViewById(R.id.get);
-
         listView = (ListView) findViewById(R.id.list);
-
         myAdapter = new MyAdapter(MainActivity.this);
         myAdapter.setMaximList(list);
         listView.setAdapter(myAdapter);
-
-        Maxim tmp = new Maxim(1, "さぁ、ゲームをはじめよう","NoGame NoLife","『　　』","暇");
-        list.add(tmp);
-
+        list.add(new Maxim(0, "さぁ、ゲームをはじめよう","ノーゲーム・ノーライフ","『　』","暇"));
     }
 
     void addToList(String str){
@@ -126,15 +123,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuItem1:
-                showIPDialog(this,"title","HelloWorld");
+                showIPDialog(this);
                 return true;
+            case android.R.id.home:
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
 
-    private void showIPDialog(final Activity activity, String title, String text){
+    private void showIPDialog(final Activity activity){
         AlertDialog.Builder ad = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         //カスタムダイアログの要素にアクセスするためのView
@@ -149,9 +148,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
-                        address = "http://"+newServerIP.getText().toString();
-                        if(newServerPort.getText() != null){
-                            address += ":"+newServerPort.getText().toString();
+                        if (!newServerIP.getText().toString().isEmpty()) {
+                            address = "http://" + newServerIP.getText().toString();
+                            if (!newServerPort.getText().toString().isEmpty()) {
+                                address += ":" + newServerPort.getText().toString();
+                            }
                         }
                     }
                 })
@@ -160,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
         ad.create();
         ad.show();
     }
+
 
 }

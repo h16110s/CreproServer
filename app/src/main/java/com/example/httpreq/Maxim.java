@@ -13,9 +13,8 @@ public class Maxim {
         this.person = person;
         this.emotion = emotion;
     }
-    public int getId() {
-        return id;
-    }
+
+    public int getId() { return id; }
 
     public String getMaxim() {
         return maxim;
