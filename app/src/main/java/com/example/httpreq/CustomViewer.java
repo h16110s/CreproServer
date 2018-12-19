@@ -49,7 +49,7 @@ public class CustomViewer extends AppCompatActivity {
     }
 
     public String getAddress(){
-        return sharedPreferences.getString("ADDRESS", "http://192.168.10.100:3000");
+        return sharedPreferences.getString("ADDRESS", "http://192.168.10.1:3000");
     }
 
 

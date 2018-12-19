@@ -30,7 +30,36 @@
             android:id="@+id/list" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/reqURLview"
-            app:layout_constraintVertical_bias="1.0">
+            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/searchMaxim"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp">
     </ListView>
+    <TextView
+            android:text="@string/idTextView"
+            android:layout_width="29dp"
+            android:layout_height="21dp"
+            android:id="@+id/searchID" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/reqURLview" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+    <TextView
+            android:text="@string/animeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/searchAnime"
+            app:layout_constraintBaseline_toBaselineOf="@+id/searchID"
+            app:layout_constraintStart_toEndOf="@+id/searchID" android:layout_marginStart="8dp"/>
+    <TextView
+            android:text="@string/personTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchPerson"
+            app:layout_constraintBaseline_toBaselineOf="@+id/searchAnime"
+            app:layout_constraintStart_toEndOf="@+id/searchAnime" android:layout_marginStart="8dp"/>
+    <TextView
+            android:text="@string/maximTextView"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchMaxim" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/searchPerson"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:textSize="@dimen/maximSize"/>
 </android.support.constraint.ConstraintLayout>

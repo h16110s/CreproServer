@@ -17,7 +17,8 @@ import java.util.*;
 public class HomeViewer extends CustomViewer {
     public static final String EXTRA_MESSAGE = "";
     private static final int REQUEST_CODE = 1234;
-    private static final Set<String> EMOTION = new HashSet<String>(Arrays.asList("元気","別れ","悲し","挫折","感動", "暇","動作テスト"));
+//    private static final Set<String> EMOTION = new HashSet<String>(Arrays.asList("元気","別れ","悲し","挫折","感動", "暇","動作テスト"));
+    private static final Map<String, String> EMOTION = new HashMap<String, String>();
     TextView textView;
     public TextToSpeech tts;
     ImageView matchImage;
@@ -32,6 +33,7 @@ public class HomeViewer extends CustomViewer {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
         }
+        setMap();
         // スプラッシュthemeを通常themeに変更する
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_home_viewer);
@@ -59,7 +61,8 @@ public class HomeViewer extends CustomViewer {
 
     public void MSerch(View v) {
         matchImage.setVisibility(View.INVISIBLE);
-        textView.setText("今の気持ちを教えてね");
+        textView.setText("");
+
         //Intentの作成
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -80,11 +83,10 @@ public class HomeViewer extends CustomViewer {
             for(int i = 0; i<speechToChar.size(); i++){
                 spokenString += speechToChar.get(i) + "\n";
             }
-            if(EMOTION.contains(speechToChar.get(0))) {
+            if(EMOTION.containsKey(speechToChar.get(0))) {
                 Intent intent = new Intent(this, HttpSearch.class);
-                intent.putExtra(EXTRA_MESSAGE, speechToChar.get(0).toString());
+                intent.putExtra(EXTRA_MESSAGE, EMOTION.get(speechToChar.get(0)));
                 startActivity(intent);
-
             }
             else{
                 Glide.with(this).load(R.raw.kesshouban).into(matchImage);
@@ -100,6 +102,23 @@ public class HomeViewer extends CustomViewer {
         //Dialogを用いて表示
 //        showDialog(this,"",spokenString);
 //        super.onActivityResult(reqestCode,resultCode,data);//お決まりだそうです
+    }
+
+    private void setMap(){
+        EMOTION.put("元気","元気");
+        EMOTION.put("元気にして","元気");
+        EMOTION.put("元気が出ない","元気");
+        EMOTION.put("元気が出る名言","元気");
+        EMOTION.put("元気が欲しい","元気");
+        EMOTION.put("悲しい","悲し");
+        EMOTION.put("悲しい気分","悲し");
+        EMOTION.put("悲しいな","悲し");
+        EMOTION.put("悲しみ","悲し");
+        EMOTION.put("悲しみが深い","悲し");
+        EMOTION.put("挫折","挫折");
+        EMOTION.put("感動","感動");
+        EMOTION.put("暇","暇");
+        EMOTION.put("テスト","動作テスト");
     }
 }
 

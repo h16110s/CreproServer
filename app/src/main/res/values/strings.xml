@@ -4,4 +4,8 @@
     <string name="getButton">GET</string>
     <string name="defaultComment">今の気持ちを教えてね</string>
     <string name="searchEmotion">emotion</string>
+    <string name="idTextView">ID</string>
+    <string name="animeTextView">anime</string>
+    <string name="personTextView">person</string>
+    <string name="maximTextView">maxim</string>
 </resources>

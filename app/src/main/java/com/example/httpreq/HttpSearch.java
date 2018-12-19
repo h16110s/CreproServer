@@ -1,6 +1,7 @@
 package com.example.httpreq;
 
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,14 +18,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class HttpSearch extends CustomViewer {
+    String EMOTION;
     TextView textViewUrl;
     Button buttonGet;
     ListView listView;
     ArrayList<Maxim> list = new ArrayList<Maxim>();
     MyAdapter myAdapter;
-    String EMOTION;
+
+    TextToSpeech tts;
+
+    TextView idView;
+    TextView animeView;
+    TextView personView;
+    TextView maximView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +45,33 @@ public class HttpSearch extends CustomViewer {
         textViewUrl = (TextView)findViewById(R.id.reqURLview);
         buttonGet = (Button)findViewById(R.id.get);
         listView = (ListView) findViewById(R.id.list);
+        tts = new TextToSpeech(this, null);
+        idView = (TextView)findViewById(R.id.searchID);
+        animeView = (TextView)findViewById(R.id.searchAnime);
+        personView = (TextView)findViewById(R.id.searchPerson);
+        maximView = (TextView)findViewById(R.id.searchMaxim);
         myAdapter = new MyAdapter(HttpSearch.this);
         myAdapter.setMaximList(list);
         listView.setAdapter(myAdapter);
-        list.add(new Maxim(0, "さぁ、ゲームをはじめよう","ノーゲーム・ノーライフ","『　』","暇"));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tts.speak(list.get(position).getSpeechText(),TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
 
         Intent intent = getIntent();
         EMOTION = intent.getStringExtra(HomeViewer.EXTRA_MESSAGE);
         textViewUrl.setText(EMOTION);
         searchMaxim(EMOTION);
+
+    }
+
+    private void dispMaxim(Maxim input){
+        idView.setText("ID:"+String.valueOf(input.getId()));
+        animeView.setText(input.getAnime());
+        personView.setText(input.getPerson());
+        maximView.setText(input.getMaxim());
     }
 
     public void searchMaxim(String emotion) {
@@ -60,6 +89,17 @@ public class HttpSearch extends CustomViewer {
                             Log.d("HTTP_GET",str);
                             addToList(str);
                             myAdapter.notifyDataSetChanged();
+
+                            //検索結果が0ではなければランダムで内容を読み上げ
+                            if(list.size() != 0){
+                                int r = new Random().nextInt(list.size());
+                                dispMaxim(list.get(r));
+                                tts.speak(list.get(r).getSpeechText(),TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                            else{
+                                dispMaxim(new Maxim(0,"Can't get Maxim","","",""));
+                                tts.speak("該当する名言は見つかりませんでした。",TextToSpeech.QUEUE_FLUSH, null);
+                            }
                         }
                     });
                 } catch (Exception ex) {
@@ -68,8 +108,10 @@ public class HttpSearch extends CustomViewer {
                         public void run() {
                             Log.d("HTTP_GET","Connection Refused:onButtonGet");
                             list.clear();
-                            list.add(new Maxim(0,"Connection Refused","","",""));
-                            myAdapter.notifyDataSetChanged();                        }
+//                            list.add(new Maxim(0,"Connection Refused","","",""));
+                            myAdapter.notifyDataSetChanged();
+                            dispMaxim(new Maxim(0,"Connection Refused","","",""));
+                        }
                     });
                 }
             }
