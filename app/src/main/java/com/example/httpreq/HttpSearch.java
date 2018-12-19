@@ -2,6 +2,8 @@ package com.example.httpreq;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.EmbossMaskFilter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class HttpSearch extends AppCompatActivity {
+
     TextView textViewUrl;
     TextView serverIP;
     EditText newServerIP;
@@ -34,21 +37,58 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Maxim> list = new ArrayList<Maxim>();
     MyAdapter myAdapter;
     String address;
+    String EMOTION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_http);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         address="http://192.168.10.100:3000";
         textViewUrl = (TextView)findViewById(R.id.reqURLview);
         buttonGet = (Button)findViewById(R.id.get);
         listView = (ListView) findViewById(R.id.list);
-        myAdapter = new MyAdapter(MainActivity.this);
+        myAdapter = new MyAdapter(HttpSearch.this);
         myAdapter.setMaximList(list);
         listView.setAdapter(myAdapter);
         list.add(new Maxim(0, "さぁ、ゲームをはじめよう","ノーゲーム・ノーライフ","『　』","暇"));
+
+        Intent intent = getIntent();
+        EMOTION = intent.getStringExtra(HomeViewer.EXTRA_MESSAGE);
+        textViewUrl.setText(EMOTION);
+    }
+
+    public void searchMaxim(String emotion) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(address+"emotion/"+EMOTION);
+                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    final String str = InputStreamToString(con.getInputStream());
+                    Log.d("HTTP", str);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("HTTP_GET",str);
+                            addToList(str);
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (Exception ex) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("HTTP_GET","Connection Refused:onButtonGet");
+                            list.clear();
+                            list.add(new Maxim(0,"Connection Refused","","",""));
+                            myAdapter.notifyDataSetChanged();                        }
+                    });
+                    System.out.println(ex);
+                }
+            }
+        }).start();
     }
 
     void addToList(String str){

@@ -5,10 +5,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".HttpSearch">
 
     <TextView
-            android:text="RequestURL"
+            android:text="message"
             android:layout_width="0dp"
             android:layout_height="26dp" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="12dp"
@@ -22,7 +22,7 @@
             android:id="@+id/get"
             android:onClick="onButtonGet"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/reqURLview"/>
+            app:layout_constraintBaseline_toBaselineOf="@+id/reqURLview" android:visibility="invisible"/>
     <ListView
             android:layout_width="0dp"
             android:layout_height="0dp"
