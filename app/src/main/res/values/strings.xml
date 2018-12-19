@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">HTTPreq</string>
     <string name="title">名言検索</string>
+    <string name="getButton">GET</string>
+    <string name="defaultComment">今の気持ちを教えてね</string>
+    <string name="searchEmotion">emotion</string>
 </resources>

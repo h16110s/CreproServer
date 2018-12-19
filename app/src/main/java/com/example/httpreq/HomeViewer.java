@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.*;
 
-public class HomeViewer extends AppCompatActivity {
+public class HomeViewer extends CustomViewer {
     public static final String EXTRA_MESSAGE = "";
     private static final int REQUEST_CODE = 1234;
     private static final Set<String> EMOTION = new HashSet<String>(Arrays.asList("元気","別れ","悲し","挫折","感動", "暇","動作テスト"));
@@ -42,8 +41,8 @@ public class HomeViewer extends AppCompatActivity {
 
         matchImage = findViewById(R.id.match_image);
 //        matchImage.setVisibility(View.VISIBLE);
-    }
 
+    }
 
     public void showDialog(final Activity activity, String title, String text){
         AlertDialog.Builder ad =new AlertDialog.Builder(activity);
@@ -60,6 +59,7 @@ public class HomeViewer extends AppCompatActivity {
 
     public void MSerch(View v) {
         matchImage.setVisibility(View.INVISIBLE);
+        textView.setText("今の気持ちを教えてね");
         //Intentの作成
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);

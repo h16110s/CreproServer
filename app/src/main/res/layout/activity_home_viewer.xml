@@ -15,7 +15,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@android:drawable/presence_audio_away" android:layout_marginTop="60dp"
-            app:layout_constraintTop_toBottomOf="@+id/match_image"/>
+            app:layout_constraintTop_toBottomOf="@+id/match_image" android:contentDescription="TODO"/>
 
     <TextView
             android:id="@+id/comment"
@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
-            android:text="今の気持ちを教えてね"
+            android:text="@string/defaultComment"
             android:textSize="32sp"
             android:gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="160dp" android:visibility="invisible" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/resultM" app:layout_constraintVertical_bias="0.75"/>
+            app:layout_constraintTop_toBottomOf="@+id/resultM" app:layout_constraintVertical_bias="0.75"
+            android:contentDescription="TODO"/>
 
 </android.support.constraint.ConstraintLayout>

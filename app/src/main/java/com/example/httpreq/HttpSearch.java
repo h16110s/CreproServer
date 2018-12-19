@@ -1,17 +1,9 @@
 package com.example.httpreq;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.EmbossMaskFilter;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import org.json.JSONArray;
@@ -26,26 +18,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class HttpSearch extends AppCompatActivity {
-
+public class HttpSearch extends CustomViewer {
     TextView textViewUrl;
-    TextView serverIP;
-    EditText newServerIP;
-    EditText newServerPort;
     Button buttonGet;
     ListView listView;
     ArrayList<Maxim> list = new ArrayList<Maxim>();
     MyAdapter myAdapter;
-    String address;
     String EMOTION;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        address="http://192.168.10.100:3000";
         textViewUrl = (TextView)findViewById(R.id.reqURLview);
         buttonGet = (Button)findViewById(R.id.get);
         listView = (ListView) findViewById(R.id.list);
@@ -57,6 +42,7 @@ public class HttpSearch extends AppCompatActivity {
         Intent intent = getIntent();
         EMOTION = intent.getStringExtra(HomeViewer.EXTRA_MESSAGE);
         textViewUrl.setText(EMOTION);
+        searchMaxim(EMOTION);
     }
 
     public void searchMaxim(String emotion) {
@@ -64,7 +50,7 @@ public class HttpSearch extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(address+"emotion/"+EMOTION);
+                    URL url = new URL( getAddress() + "/emotion/" + EMOTION);
                     HttpURLConnection con = (HttpURLConnection)url.openConnection();
                     final String str = InputStreamToString(con.getInputStream());
                     Log.d("HTTP", str);
@@ -85,7 +71,6 @@ public class HttpSearch extends AppCompatActivity {
                             list.add(new Maxim(0,"Connection Refused","","",""));
                             myAdapter.notifyDataSetChanged();                        }
                     });
-                    System.out.println(ex);
                 }
             }
         }).start();
@@ -114,7 +99,7 @@ public class HttpSearch extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(address);
+                    URL url = new URL(getAddress());
                     HttpURLConnection con = (HttpURLConnection)url.openConnection();
                     final String str = InputStreamToString(con.getInputStream());
                     Log.d("HTTP", str);
@@ -135,7 +120,6 @@ public class HttpSearch extends AppCompatActivity {
                             list.add(new Maxim(0,"Connection Refused","","",""));
                             myAdapter.notifyDataSetChanged();                        }
                     });
-                    System.out.println(ex);
                 }
             }
         }).start();
@@ -152,58 +136,4 @@ public class HttpSearch extends AppCompatActivity {
         br.close();
         return sb.toString();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 参照するリソースは上でリソースファイルに付けた名前と同じもの
-        getMenuInflater().inflate(R.menu.option, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuItem1:
-                showIPDialog(this);
-                return true;
-            case android.R.id.home:
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-    private void showIPDialog(final Activity activity){
-        AlertDialog.Builder ad = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        //カスタムダイアログの要素にアクセスするためのView
-        View dig = inflater.inflate(R.layout.dialog_ip, null);
-        serverIP = (TextView) dig.findViewById(R.id.currentServer);
-        serverIP.setText("現在の接続先："+address);
-        newServerIP = (EditText) dig.findViewById(R.id.newServer);
-        newServerPort = (EditText) dig.findViewById(R.id.newServerPort);
-        ad.setView(dig)
-                // Add action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        if (!newServerIP.getText().toString().isEmpty()) {
-                            address = "http://" + newServerIP.getText().toString();
-                            if (!newServerPort.getText().toString().isEmpty()) {
-                                address += ":" + newServerPort.getText().toString();
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-        ad.create();
-        ad.show();
-    }
-
-
 }
