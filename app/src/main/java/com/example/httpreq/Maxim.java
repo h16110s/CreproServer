@@ -35,7 +35,7 @@ public class Maxim {
     public String getSpeechText(){
         String s = "";
         s += this.anime + "。";
-        s += this.person + "の名言です。";
+        s += this.person + "の名言。";
         s += this.maxim ;
         return s;
     }

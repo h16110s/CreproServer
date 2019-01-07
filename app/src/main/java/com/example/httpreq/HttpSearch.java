@@ -22,6 +22,7 @@ import java.util.Random;
 
 public class HttpSearch extends CustomViewer {
     String EMOTION;
+    String ANIME;
     TextView textViewUrl;
     Button buttonGet;
     ListView listView;
@@ -62,9 +63,15 @@ public class HttpSearch extends CustomViewer {
 
         Intent intent = getIntent();
         EMOTION = intent.getStringExtra(HomeViewer.EXTRA_MESSAGE);
-        textViewUrl.setText(EMOTION);
-        searchMaxim(EMOTION);
-
+        if(EMOTION.equals("__ANIME_SEARCH")){
+            ANIME = intent.getStringExtra(HomeViewer.ANIME);
+            textViewUrl.setText(ANIME);
+            searchAnime(ANIME);
+        }
+        else {
+            textViewUrl.setText(EMOTION);
+            searchMaxim(EMOTION);
+        }
     }
 
     private void dispMaxim(Maxim input){
@@ -117,6 +124,52 @@ public class HttpSearch extends CustomViewer {
             }
         }).start();
     }
+
+
+    public void searchAnime(String anime) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL( getAddress() + "/anime/" + ANIME);
+                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    final String str = InputStreamToString(con.getInputStream());
+                    Log.d("HTTP", str);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("HTTP_GET",str);
+                            addToList(str);
+                            myAdapter.notifyDataSetChanged();
+
+                            //検索結果が0ではなければランダムで内容を読み上げ
+                            if(list.size() != 0){
+                                int r = new Random().nextInt(list.size());
+                                dispMaxim(list.get(r));
+                                tts.speak(list.get(r).getSpeechText(),TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                            else{
+                                dispMaxim(new Maxim(0,"Can't get Maxim","","",""));
+                                tts.speak("該当するアニメは見つかりませんでした。",TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                        }
+                    });
+                } catch (Exception ex) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("HTTP_GET","Connection Refused:onButtonGet");
+                            list.clear();
+//                            list.add(new Maxim(0,"Connection Refused","","",""));
+                            myAdapter.notifyDataSetChanged();
+                            dispMaxim(new Maxim(0,"Connection Refused","","",""));
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
 
     void addToList(String str){
         list.clear();
